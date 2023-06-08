@@ -2599,7 +2599,7 @@
     (in_bom yes) (on_board yes)
     (uuid 0cb21074-c045-48f6-8743-4c268a62950d)
     (property "Reference" "R8" (id 0) (at 54.61 135.89 90))
-    (property "Value" "120" (id 1) (at 54.61 138.43 90))
+    (property "Value" "82" (id 1) (at 54.61 138.43 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 54.61 144.018 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -2729,7 +2729,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 1a764047-a80f-48fa-9356-557bc7ba61b6)
     (property "Reference" "R7" (id 0) (at 54.61 111.76 90))
-    (property "Value" "120" (id 1) (at 54.61 114.3 90))
+    (property "Value" "82" (id 1) (at 54.61 114.3 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 54.61 119.888 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -2965,7 +2965,7 @@
     (property "Reference" "TP2" (id 0) (at 43.18 113.5379 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "TestPoint" (id 1) (at 43.18 116.0779 0)
+    (property "Value" "USER0" (id 1) (at 43.18 116.0779 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm" (id 2) (at 45.72 118.11 0)
@@ -3269,7 +3269,7 @@
     (property "Reference" "TP3" (id 0) (at 43.18 137.6679 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "TestPoint" (id 1) (at 43.18 140.2079 0)
+    (property "Value" "USER1" (id 1) (at 43.18 140.2079 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm" (id 2) (at 45.72 142.24 0)
@@ -3779,7 +3779,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid de0ebb11-8d49-4b76-822b-99543b6eed0f)
     (property "Reference" "R2" (id 0) (at 53.34 104.14 90))
-    (property "Value" "294" (id 1) (at 53.34 106.68 90))
+    (property "Value" "300" (id 1) (at 53.34 106.68 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 53.34 112.268 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -4082,7 +4082,7 @@
       (reference "R1") (unit 1) (value "120") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/de0ebb11-8d49-4b76-822b-99543b6eed0f"
-      (reference "R2") (unit 1) (value "294") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R2") (unit 1) (value "300") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/269a132c-8f66-4ed5-9a32-4e13b0b1de9b"
       (reference "R3") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
@@ -4097,10 +4097,10 @@
       (reference "R6") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/1a764047-a80f-48fa-9356-557bc7ba61b6"
-      (reference "R7") (unit 1) (value "120") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R7") (unit 1) (value "82") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/0cb21074-c045-48f6-8743-4c268a62950d"
-      (reference "R8") (unit 1) (value "120") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R8") (unit 1) (value "82") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/be5bd9b5-3fb2-4be7-a3d2-60d82020931f"
       (reference "R9") (unit 1) (value "4k7") (footprint "Resistor_SMD:R_0603_1608Metric")
@@ -4112,10 +4112,10 @@
       (reference "TP1") (unit 1) (value "VCC33") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
     )
     (path "/3da8c133-6711-4639-b750-4f849ed621b0"
-      (reference "TP2") (unit 1) (value "TestPoint") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
+      (reference "TP2") (unit 1) (value "USER0") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
     )
     (path "/7284972f-69e3-48ac-ba8a-b45c6ce11ed6"
-      (reference "TP3") (unit 1) (value "TestPoint") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
+      (reference "TP3") (unit 1) (value "USER1") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
     )
     (path "/466255f5-b832-450e-919d-5e3de13155b2"
       (reference "TP4") (unit 1) (value "VCC18") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
