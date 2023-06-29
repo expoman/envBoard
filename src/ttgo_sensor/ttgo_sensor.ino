@@ -9,12 +9,15 @@
 
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <Adafruit_VEML7700.h>
+#include "Adafruit_BME680.h"
+#include <Adafruit_LSM6DS3TRC.h>
 
 SSD1306Wire display(0x3c, I2C_SDA, I2C_SCL);
 
 #define USE1WIRE
 
-#define MONVUSB
+//#define MONVUSB
 
 #define LORALOG false
 
@@ -33,55 +36,92 @@ const int oneWireBus_0_pin = 2;
 //Setup oneWire instance
 OneWire oneWireBus_0(oneWireBus_0_pin);
 //Pass our oneWire reference to Dallas Temperature sensor
-DallasTemperature sensor_0(&oneWireBus_0);
+DallasTemperature sensors_0(&oneWireBus_0);
 
 #endif
 
 //user leds
-#define LED0 12
+#define LED0 35
 #define LED1 14
 
 //define i2c pins
 #define I2CSDA_1 13
 #define I2CSCL_1 15
 
+//ambient light sensor
+Adafruit_VEML7700 veml = Adafruit_VEML7700();
+//veml7700 found
+bool veml7700fnd = false;
+
+//BME680
+Adafruit_BME680 bme; // I2C
+//bm3680 found
+bool bme680fnd = false;
 
 
 void setup()
 {
   initBoard();
 
+  #ifdef HAS_DISPLAY
   // Initialising the UI will init the display too.
   display.init();
   display.flipScreenVertically();
   display.setFont(ArialMT_Plain_10);
+  #endif
 
-  display.clear();
-  display.drawString(0, 10, "TTGO Lora32 v2 setup");
-  display.drawString(0, 20, "setup i2c");
-  display.display();
   //setup i2c
+  Serial.println("configure i2c_1");
   Wire.begin(I2CSDA_1, I2CSCL_1);
   Serial.println("trying to disable internal pullups");
   digitalWrite(I2CSDA_1, LOW);
   digitalWrite(I2CSCL_1, LOW);
-  display.drawString(0, 20, "setup i2c done");
-  display.drawString(0, 30, "setup LoRa");
-  display.display();
 
-  //Serial.println("Small LoRa Sender");
+  Serial.println("configure LoRa");
   LoRa.setPins(RADIO_CS_PIN, RADIO_RST_PIN, RADIO_DIO0_PIN);
   if (!LoRa.begin(LoRa_frequency)) {
     Serial.println("Starting LoRa failed!");
     //while (1);
   }
-  display.drawString(0, 30, "setup LoRa done");
-  display.display();
 
+  //Configure user leds
+  Serial.println("configure use leds");
+  pinMode(LED0, OUTPUT);
+  pinMode(LED1, OUTPUT);
+  digitalWrite(LED0, LOW);
+  digitalWrite(LED1, LOW);
+
+  //configure VEML7700
+  Serial.println("configure VEML7700");
+  if (veml.begin()) {
+    veml7700fnd = true;
+    Serial.println("Found a VEML7700 sensor");
+    veml.setGain(VEML7700_GAIN_1);
+    veml.setIntegrationTime(VEML7700_IT_100MS);
+
+  } else {
+    Serial.println("No sensor found ... check your wiring?");
+  }
+
+  Serial.println("configure bme680");
+  if (!bme.begin(0x76)) {
+    Serial.println("Could not find a valid BME680 sensor, check wiring!");
+  }
+  else{
+    bme680fnd = true;
+    // Set up oversampling and filter initialization
+    bme.setTemperatureOversampling(BME680_OS_8X);
+    bme.setHumidityOversampling(BME680_OS_2X);
+    bme.setPressureOversampling(BME680_OS_4X);
+    bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+    bme.setGasHeater(320, 150); // 320*C for 150 ms
+  }
 }
 
 void loop()
 {
+    Serial.println("Start loop...");
+    #ifdef HAS_DISPLAY
     // clear the display
     display.clear();
     display.drawString(0, 10, "TTGO Lora32 v2");
@@ -89,7 +129,40 @@ void loop()
     char buf0[32];
     sprintf(buf0, "vbat: %.2f V",getVusb());
     display.drawString(0,20, buf0);
+    Serial.println(buf0);
     #endif
     display.display();
+    #endif
+    #ifdef USE1WIRE
+    sensors_0.requestTemperatures(); 
+    float temperatureC = sensors_0.getTempCByIndex(0);
+    Serial.print(temperatureC);
+    Serial.println("ºC");
+    #endif
+    if(veml7700fnd){
+      Serial.print("Lux:");
+      Serial.println(veml.readLux());
+    }
     delay(500);
+
+  //LED0 has problem -> resolder to other pin
+  //toggle LED1
+  Serial.printf("test %d\n", digitalRead(LED0));
+  if(digitalRead(LED1) == 0){
+    digitalWrite(LED1, 1);
+  }
+  else{
+    digitalWrite(LED1, 0);
+  }
+  if(bme680fnd){
+    if (! bme.performReading()) {
+      Serial.println("Failed to perform reading :(");
+    }
+    else{
+      Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
+      Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
+      Serial.print("Humidity = "); Serial.print(bme.humidity); Serial.println(" %");
+      Serial.print("Gas = "); Serial.print(bme.gas_resistance / 1000.0); Serial.println(" KOhms");
+    }
+  }
 }
