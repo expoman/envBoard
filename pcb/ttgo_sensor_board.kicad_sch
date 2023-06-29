@@ -2394,7 +2394,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 818c981b-8ec4-45c6-a6a2-c04f32ccee84)
   )
-  (label "GPIO27" (at 50.8 44.45 180)
+  (label "GPIO26" (at 50.8 44.45 180)
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid 8967bd12-e139-4d5a-a68f-aa4f430eac00)
   )
