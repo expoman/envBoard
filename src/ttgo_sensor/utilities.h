@@ -15,7 +15,7 @@
 * please open this note and change to the frequency you need to test
 * */
 
-// #define LoRa_frequency      868.0
+#define LoRa_frequency      868.0
 
 
 #define UNUSE_PIN                   (0)
