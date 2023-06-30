@@ -53,7 +53,7 @@ Adafruit_VEML7700 veml = Adafruit_VEML7700();
 //veml7700 found
 bool veml7700fnd = false;
 
-void configureVeml7700(){
+void configVeml7700(){
   //configure VEML7700
   Serial.println("configure VEML7700");
   if (veml.begin()) {
@@ -78,7 +78,7 @@ Adafruit_BME680 bme; // I2C
 //bm3680 found
 bool bme680fnd = false;
 
-void configureBme680(){
+void configBme680(){
   Serial.println("configure bme680");
   if (!bme.begin(0x76)) {
     Serial.println("Could not find a valid BME680 sensor, check wiring!");
@@ -105,6 +105,163 @@ void printBme680Infos(){
       Serial.print("Gas = "); Serial.print(bme.gas_resistance / 1000.0); Serial.println(" KOhms");
     }
   }
+}
+
+//LSM6DS3 sensor
+Adafruit_LSM6DS3TRC lsm6ds3trc;
+bool lsm6dsfnd = false;
+
+void configLsm6ds(){
+  Serial.println("configure LSM6DS33");
+  if (!lsm6ds3trc.begin_I2C(0x6a)) {
+    Serial.println("Failed to find LSM6DS3TR-C chip");
+  }
+  else{
+    lsm6dsfnd = true;
+    Serial.println("LSM6DS33 Found!");
+
+    // lsm6ds3trc.setGyroRange(LSM6DS_GYRO_RANGE_250_DPS);
+    Serial.print("Gyro range set to: ");
+    switch (lsm6ds3trc.getGyroRange()) {
+    case LSM6DS_GYRO_RANGE_125_DPS:
+      Serial.println("125 degrees/s");
+      break;
+    case LSM6DS_GYRO_RANGE_250_DPS:
+      Serial.println("250 degrees/s");
+      break;
+    case LSM6DS_GYRO_RANGE_500_DPS:
+      Serial.println("500 degrees/s");
+      break;
+    case LSM6DS_GYRO_RANGE_1000_DPS:
+      Serial.println("1000 degrees/s");
+      break;
+    case LSM6DS_GYRO_RANGE_2000_DPS:
+      Serial.println("2000 degrees/s");
+      break;
+    case ISM330DHCX_GYRO_RANGE_4000_DPS:
+      break; // unsupported range for the DS33
+    }
+    // lsm6ds3trc.setGyroDataRate(LSM6DS_RATE_12_5_HZ);
+    Serial.print("Gyro data rate set to: ");
+    switch (lsm6ds3trc.getGyroDataRate()) {
+    case LSM6DS_RATE_SHUTDOWN:
+      Serial.println("0 Hz");
+      break;
+    case LSM6DS_RATE_12_5_HZ:
+      Serial.println("12.5 Hz");
+      break;
+    case LSM6DS_RATE_26_HZ:
+      Serial.println("26 Hz");
+      break;
+    case LSM6DS_RATE_52_HZ:
+      Serial.println("52 Hz");
+      break;
+    case LSM6DS_RATE_104_HZ:
+      Serial.println("104 Hz");
+      break;
+    case LSM6DS_RATE_208_HZ:
+      Serial.println("208 Hz");
+      break;
+    case LSM6DS_RATE_416_HZ:
+      Serial.println("416 Hz");
+      break;
+    case LSM6DS_RATE_833_HZ:
+      Serial.println("833 Hz");
+      break;
+    case LSM6DS_RATE_1_66K_HZ:
+      Serial.println("1.66 KHz");
+      break;
+    case LSM6DS_RATE_3_33K_HZ:
+      Serial.println("3.33 KHz");
+      break;
+    case LSM6DS_RATE_6_66K_HZ:
+      Serial.println("6.66 KHz");
+      break;
+    }
+
+    // lsm6ds3trc.setAccelDataRate(LSM6DS_RATE_12_5_HZ);
+    Serial.print("Accelerometer data rate set to: ");
+    switch (lsm6ds3trc.getAccelDataRate()) {
+    case LSM6DS_RATE_SHUTDOWN:
+      Serial.println("0 Hz");
+      break;
+    case LSM6DS_RATE_12_5_HZ:
+      Serial.println("12.5 Hz");
+      break;
+    case LSM6DS_RATE_26_HZ:
+      Serial.println("26 Hz");
+      break;
+    case LSM6DS_RATE_52_HZ:
+      Serial.println("52 Hz");
+      break;
+    case LSM6DS_RATE_104_HZ:
+      Serial.println("104 Hz");
+      break;
+    case LSM6DS_RATE_208_HZ:
+      Serial.println("208 Hz");
+      break;
+    case LSM6DS_RATE_416_HZ:
+      Serial.println("416 Hz");
+      break;
+    case LSM6DS_RATE_833_HZ:
+      Serial.println("833 Hz");
+      break;
+    case LSM6DS_RATE_1_66K_HZ:
+      Serial.println("1.66 KHz");
+      break;
+    case LSM6DS_RATE_3_33K_HZ:
+      Serial.println("3.33 KHz");
+      break;
+    case LSM6DS_RATE_6_66K_HZ:
+      Serial.println("6.66 KHz");
+      break;
+    }
+
+    // lsm6ds3trc.setAccelRange(LSM6DS_ACCEL_RANGE_2_G);
+    Serial.print("Accelerometer range set to: ");
+    switch (lsm6ds3trc.getAccelRange()) {
+    case LSM6DS_ACCEL_RANGE_2_G:
+      Serial.println("+-2G");
+      break;
+    case LSM6DS_ACCEL_RANGE_4_G:
+      Serial.println("+-4G");
+      break;
+    case LSM6DS_ACCEL_RANGE_8_G:
+      Serial.println("+-8G");
+      break;
+    case LSM6DS_ACCEL_RANGE_16_G:
+      Serial.println("+-16G");
+      break;
+    }
+  }
+}
+
+void printLsm6dsInfos(){
+  sensors_event_t accel;
+  sensors_event_t gyro;
+  sensors_event_t temp;
+  lsm6ds3trc.getEvent(&accel, &gyro, &temp);
+
+  /* Display the results (acceleration is measured in m/s^2) */
+  Serial.print("\t\tAccel X: ");
+  Serial.print(accel.acceleration.x);
+  Serial.print(" \tY: ");
+  Serial.print(accel.acceleration.y);
+  Serial.print(" \tZ: ");
+  Serial.print(accel.acceleration.z);
+  Serial.println(" m/s^2");
+  /* Display the results (gyroscop is measured in rad/s) */
+  Serial.print("\t\Gyro X: ");
+  Serial.print(gyro.gyro.x);
+  Serial.print(" \tY: ");
+  Serial.print(gyro.gyro.y);
+  Serial.print(" \tZ: ");
+  Serial.print(gyro.gyro.z);
+  Serial.println(" rad/s");
+    /* Display the results (temp is measured in deg C) */
+  Serial.print("\t\Temp: ");
+  Serial.print(temp.temperature);
+  Serial.println(" deg C");
 }
 
 void setup()
@@ -141,8 +298,9 @@ void setup()
 
 
   //configure sensors
-  configureVeml7700();
-  configureBme680();
+  configVeml7700();
+  configBme680();
+  configLsm6ds();
 }
 
 void loop()
@@ -179,6 +337,7 @@ void loop()
   }
   printVeml7700Infos();
   printBme680Infos();
+  printLsm6dsInfos();
 
   delay(500);
 }
