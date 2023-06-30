@@ -17,7 +17,7 @@ SSD1306Wire display(0x3c, I2C_SDA, I2C_SCL);
 
 #define USE1WIRE
 
-//#define MONVUSB
+#define MONVUSB
 
 #define LORALOG false
 
@@ -41,8 +41,8 @@ DallasTemperature sensors_0(&oneWireBus_0);
 #endif
 
 //user leds
-#define LED0 35
-#define LED1 14
+#define LED0 14
+#define LED1 12
 
 //define i2c pins
 #define I2CSDA_1 13
@@ -53,11 +53,59 @@ Adafruit_VEML7700 veml = Adafruit_VEML7700();
 //veml7700 found
 bool veml7700fnd = false;
 
+void configureVeml7700(){
+  //configure VEML7700
+  Serial.println("configure VEML7700");
+  if (veml.begin()) {
+    veml7700fnd = true;
+    Serial.println("Found a VEML7700 sensor");
+    veml.setGain(VEML7700_GAIN_1);
+    veml.setIntegrationTime(VEML7700_IT_100MS);
+
+  } else {
+    Serial.println("No sensor found ... check your wiring?");
+  }
+}
+void printVeml7700Infos(){
+    if(veml7700fnd){
+      Serial.print("Lux:");
+      Serial.println(veml.readLux());
+    }
+}
+
 //BME680
 Adafruit_BME680 bme; // I2C
 //bm3680 found
 bool bme680fnd = false;
 
+void configureBme680(){
+  Serial.println("configure bme680");
+  if (!bme.begin(0x76)) {
+    Serial.println("Could not find a valid BME680 sensor, check wiring!");
+  }
+  else{
+    bme680fnd = true;
+    // Set up oversampling and filter initialization
+    bme.setTemperatureOversampling(BME680_OS_8X);
+    bme.setHumidityOversampling(BME680_OS_2X);
+    bme.setPressureOversampling(BME680_OS_4X);
+    bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+    bme.setGasHeater(320, 150); // 320*C for 150 ms
+  }
+}
+void printBme680Infos(){
+  if(bme680fnd){
+    if (! bme.performReading()) {
+      Serial.println("Failed to perform reading :(");
+    }
+    else{
+      Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
+      Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
+      Serial.print("Humidity = "); Serial.print(bme.humidity); Serial.println(" %");
+      Serial.print("Gas = "); Serial.print(bme.gas_resistance / 1000.0); Serial.println(" KOhms");
+    }
+  }
+}
 
 void setup()
 {
@@ -91,31 +139,10 @@ void setup()
   digitalWrite(LED0, LOW);
   digitalWrite(LED1, LOW);
 
-  //configure VEML7700
-  Serial.println("configure VEML7700");
-  if (veml.begin()) {
-    veml7700fnd = true;
-    Serial.println("Found a VEML7700 sensor");
-    veml.setGain(VEML7700_GAIN_1);
-    veml.setIntegrationTime(VEML7700_IT_100MS);
 
-  } else {
-    Serial.println("No sensor found ... check your wiring?");
-  }
-
-  Serial.println("configure bme680");
-  if (!bme.begin(0x76)) {
-    Serial.println("Could not find a valid BME680 sensor, check wiring!");
-  }
-  else{
-    bme680fnd = true;
-    // Set up oversampling and filter initialization
-    bme.setTemperatureOversampling(BME680_OS_8X);
-    bme.setHumidityOversampling(BME680_OS_2X);
-    bme.setPressureOversampling(BME680_OS_4X);
-    bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
-    bme.setGasHeater(320, 150); // 320*C for 150 ms
-  }
+  //configure sensors
+  configureVeml7700();
+  configureBme680();
 }
 
 void loop()
@@ -139,30 +166,19 @@ void loop()
     Serial.print(temperatureC);
     Serial.println("ºC");
     #endif
-    if(veml7700fnd){
-      Serial.print("Lux:");
-      Serial.println(veml.readLux());
-    }
-    delay(500);
+
 
   //LED0 has problem -> resolder to other pin
   //toggle LED1
   Serial.printf("test %d\n", digitalRead(LED0));
-  if(digitalRead(LED1) == 0){
-    digitalWrite(LED1, 1);
+  if(digitalRead(LED0) == 0){
+    digitalWrite(LED0, 1);
   }
   else{
-    digitalWrite(LED1, 0);
+    digitalWrite(LED0, 0);
   }
-  if(bme680fnd){
-    if (! bme.performReading()) {
-      Serial.println("Failed to perform reading :(");
-    }
-    else{
-      Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
-      Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
-      Serial.print("Humidity = "); Serial.print(bme.humidity); Serial.println(" %");
-      Serial.print("Gas = "); Serial.print(bme.gas_resistance / 1000.0); Serial.println(" KOhms");
-    }
-  }
+  printVeml7700Infos();
+  printBme680Infos();
+
+  delay(500);
 }
