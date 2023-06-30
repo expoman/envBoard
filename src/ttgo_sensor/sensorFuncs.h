@@ -2,7 +2,13 @@
 #define SENSORFUNCS_H
 #include <Arduino.h>
 #include <SPI.h>
-//#include <Wire.h>
+#include <Wire.h>
+
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+extern DallasTemperature sensors_0;
+
 #include <Adafruit_VEML7700.h>
 #include "Adafruit_BME680.h"
 #include <Adafruit_LSM6DS3TRC.h>
