@@ -316,8 +316,18 @@ void loop()
     display.drawString(0,20, buf0);
     Serial.println(buf0);
     #endif
+    if(bme680fnd){
+      //bme.performReading();
+      sprintf(buf0, "Hum:%d, T:%d, P:%d, G:%d", bme.humidity, bme.temperature, bme.pressure, bme.gas_resistance);
+      display.drawString(0, 30, buf0);
+    }
+    if(veml7700fnd){
+      sprintf(buf0, "Lux: %d", veml.readLux());
+      display.drawString(0,40, buf0);
+    }
     display.display();
     #endif
+
     #ifdef USE1WIRE
     sensors_0.requestTemperatures(); 
     float temperatureC = sensors_0.getTempCByIndex(0);
@@ -328,12 +338,12 @@ void loop()
 
   //LED0 has problem -> resolder to other pin
   //toggle LED1
-  Serial.printf("test %d\n", digitalRead(LED0));
-  if(digitalRead(LED0) == 0){
-    digitalWrite(LED0, 1);
+  Serial.printf("test %d\n", digitalRead(LED1));
+  if(digitalRead(LED1) == 0){
+    digitalWrite(LED1, 1);
   }
   else{
-    digitalWrite(LED0, 0);
+    digitalWrite(LED1, 0);
   }
   printVeml7700Infos();
   printBme680Infos();
