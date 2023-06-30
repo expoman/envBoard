@@ -264,9 +264,35 @@ void printLsm6dsInfos(){
   Serial.println(" deg C");
 }
 
+//deep sleep state
+bool useDeepSleep = false;
+RTC_DATA_ATTR int counter = 0;
+#define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
+//#define TIME_TO_SLEEP  120        /* Time ESP32 will go to sleep (in seconds) */
+#define TIME_TO_SLEEP  10        /* Time ESP32 will go to sleep (in seconds) */
+
+void print_wakeup_reason(){
+  esp_sleep_wakeup_cause_t wakeup_reason;
+  wakeup_reason = esp_sleep_get_wakeup_cause();
+  switch(wakeup_reason)
+  {
+    case ESP_SLEEP_WAKEUP_EXT0 : Serial.println("Wakeup caused by external signal using RTC_IO"); break;
+    case ESP_SLEEP_WAKEUP_EXT1 : Serial.println("Wakeup caused by external signal using RTC_CNTL"); break;
+    case ESP_SLEEP_WAKEUP_TIMER : Serial.println("Wakeup caused by timer"); break;
+    case ESP_SLEEP_WAKEUP_TOUCHPAD : Serial.println("Wakeup caused by touchpad"); break;
+    case ESP_SLEEP_WAKEUP_ULP : Serial.println("Wakeup caused by ULP program"); break;
+    default : Serial.printf("Wakeup was not caused by deep sleep: %d\n",wakeup_reason); break;
+  }
+}
+
 void setup()
 {
   initBoard();
+
+  if(useDeepSleep){
+    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+    Serial.println("Setup ESP32 to sleep for every " + String(TIME_TO_SLEEP) + " Seconds");
+  }
 
   #ifdef HAS_DISPLAY
   // Initialising the UI will init the display too.
@@ -301,6 +327,11 @@ void setup()
   configVeml7700();
   configBme680();
   configLsm6ds();
+
+  //enter deep sleep state
+  if(useDeepSleep){
+    esp_deep_sleep_start();
+  }
 }
 
 void loop()
