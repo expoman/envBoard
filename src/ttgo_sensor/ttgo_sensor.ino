@@ -148,7 +148,9 @@ void loop()
 
   //LED0 has problem -> resolder to other pin
   //toggle LED1
-  Serial.printf("test %d\n", digitalRead(LED1));
+  char buf1[32];
+  sprintf(buf1, "State GPIO pin(%d): %d", LED1, digitalRead(LED1));
+  Serial.println(buf1);
   if(digitalRead(LED1) == 0){
     digitalWrite(LED1, 1);
   }
