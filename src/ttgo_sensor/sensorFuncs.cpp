@@ -32,7 +32,7 @@ bool bme680fnd = false;
 
 void configBme680(){
   Serial.println("configure bme680");
-  if (!bme.begin(0x76)) {
+  if(!bme.begin(0x76)) {
     Serial.println("Could not find a valid BME680 sensor, check wiring!");
   }
   else{
@@ -64,7 +64,6 @@ Adafruit_LSM6DS3TRC lsm6ds3trc;
 bool lsm6dsfnd = false;
 
 void configLsm6ds(){
-  Serial.println("configure LSM6DS33");
   if (!lsm6ds3trc.begin_I2C(0x6a)) {
     Serial.println("Failed to find LSM6DS3TR-C chip");
   }
