@@ -188,29 +188,31 @@ void configLsm6ds(){
 }
 
 void printLsm6dsInfos(){
-  sensors_event_t accel;
-  sensors_event_t gyro;
-  sensors_event_t temp;
-  lsm6ds3trc.getEvent(&accel, &gyro, &temp);
+  if(lsm6dsfnd){
+     sensors_event_t accel;
+     sensors_event_t gyro;
+     sensors_event_t temp;
+     lsm6ds3trc.getEvent(&accel, &gyro, &temp);
 
-  /* Display the results (acceleration is measured in m/s^2) */
-  Serial.print("\t\tAccel X: ");
-  Serial.print(accel.acceleration.x);
-  Serial.print(" \tY: ");
-  Serial.print(accel.acceleration.y);
-  Serial.print(" \tZ: ");
-  Serial.print(accel.acceleration.z);
-  Serial.println(" m/s^2");
-  /* Display the results (gyroscop is measured in rad/s) */
-  Serial.print("\t\Gyro X: ");
-  Serial.print(gyro.gyro.x);
-  Serial.print(" \tY: ");
-  Serial.print(gyro.gyro.y);
-  Serial.print(" \tZ: ");
-  Serial.print(gyro.gyro.z);
-  Serial.println(" rad/s");
-    /* Display the results (temp is measured in deg C) */
-  Serial.print("\t\Temp: ");
-  Serial.print(temp.temperature);
-  Serial.println(" deg C");
+     /* Display the results (acceleration is measured in m/s^2) */
+     Serial.print("Accel X: ");
+     Serial.print(accel.acceleration.x);
+     Serial.print(" \tY: ");
+     Serial.print(accel.acceleration.y);
+     Serial.print(" \tZ: ");
+     Serial.print(accel.acceleration.z);
+     Serial.println(" m/s^2");
+     /* Display the results (gyroscop is measured in rad/s) */
+     Serial.print("Gyro X: ");
+     Serial.print(gyro.gyro.x);
+     Serial.print(" \tY: ");
+     Serial.print(gyro.gyro.y);
+     Serial.print(" \tZ: ");
+     Serial.print(gyro.gyro.z);
+     Serial.println(" rad/s");
+       /* Display the results (temp is measured in deg C) */
+     Serial.print("Temp: ");
+     Serial.print(temp.temperature);
+     Serial.println(" deg C");
+  }
 }
