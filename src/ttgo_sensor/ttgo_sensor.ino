@@ -122,18 +122,21 @@ void loop()
     display.drawString(0, 10, "TTGO Lora32 v2");
     #ifdef MONVUSB
     char buf0[32];
+    char buf1[32];
     sprintf(buf0, "vbat: %.2f V",getVusb());
     display.drawString(0,20, buf0);
     Serial.println(buf0);
     #endif
     if(bme680fnd){
       //bme.performReading();
-      sprintf(buf0, "Hum:%d, T:%d, P:%d, G:%d", bme.humidity, bme.temperature, bme.pressure, bme.gas_resistance);
+      sprintf(buf0, "Hum:%.1f, T:%.1f",bme.humidity, bme.temperature);
+      sprintf(buf1, "P:%.1f, G:%.1f", bme.pressure/100.0, bme.gas_resistance/1000.0);
       display.drawString(0, 30, buf0);
+      display.drawString(0, 40, buf1);
     }
     if(veml7700fnd){
-      sprintf(buf0, "Lux: %d", veml.readLux());
-      display.drawString(0,40, buf0);
+      sprintf(buf0, "Lux: %.2f", veml.readLux());
+      display.drawString(0,50, buf0);
     }
     display.display();
     #endif
@@ -148,8 +151,7 @@ void loop()
 
   //LED0 has problem -> resolder to other pin
   //toggle LED1
-  char buf1[32];
-  sprintf(buf1, "State GPIO pin(%d): %d", LED1, digitalRead(LED1));
+  sprintf(buf0, "State GPIO pin(%d): %d", LED1, digitalRead(LED1));
   Serial.println(buf1);
   if(digitalRead(LED1) == 0){
     digitalWrite(LED1, 1);
