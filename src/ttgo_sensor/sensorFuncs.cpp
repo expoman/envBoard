@@ -52,8 +52,8 @@ void printBme680Infos(){
     }
     else{
       Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
-      Serial.print("Temperature = "); Serial.print(bme.temperature); Serial.println(" *C");
       Serial.print("Humidity = "); Serial.print(bme.humidity); Serial.println(" %");
+      Serial.print("Pressue = "); Serial.print(bme.pressure /100.0); Serial.println(" hPa");
       Serial.print("Gas = "); Serial.print(bme.gas_resistance / 1000.0); Serial.println(" KOhms");
     }
   }
