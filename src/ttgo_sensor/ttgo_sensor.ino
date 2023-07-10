@@ -84,6 +84,7 @@ static osjob_t readSensor;
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
 const unsigned TX_INTERVAL = 60;
+const unsigned SENS_INTERVAL = 20;
 
 void printHex2(unsigned v) {
     v &= 0xff;
@@ -277,8 +278,8 @@ void do_read(osjob_t* j){
   if(LORALOG){
     loraLog();
   }
-  // Schedule next transmission
-  os_setTimedCallback(&readSensor, os_getTime()+sec2osticks(TX_INTERVAL), do_read);
+  // Schedule sensors reading cycle
+  os_setTimedCallback(&readSensor, os_getTime()+sec2osticks(SENS_INTERVAL), do_read);
 }
 
 //deep sleep state
@@ -350,7 +351,7 @@ void setup()
   os_init();
   // Reset the MAC state. Session and pending data transfers will be discarded.
   LMIC_reset();
-  
+
   // Start job (sending automatically starts OTAA too)
   do_send(&sendjob);
   do_read(&readSensor);
