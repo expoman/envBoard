@@ -1,8 +1,5 @@
 // For a connection via I2C using the Arduino Wire include:
 #include <Wire.h>               // Only needed for Arduino 1.6.5 and earlier
-#include "SSD1306Wire.h"        // legacy: #include "SSD1306.h"
-// Optionally include custom images
-#include "boards.h"
 
 #include <lmic.h>
 #include <hal/hal.h>
@@ -11,44 +8,12 @@
 //Lora
 #include <LoRa.h>
 
-#include <OneWire.h>
-#include <DallasTemperature.h>
-
 #include "sensorFuncs.h"
 #include "loraFuncs.h"
 
 #include "ttn_funcs.h"
 
-SSD1306Wire display(0x3c, I2C_SDA, I2C_SCL);
-
-#define USE1WIRE
-
-#define MONVUSB
-
 #define LORALOG false
-
-#ifdef MONVUSB
-#define ADC_PIN 35
-
-float getVusb(){
-  return analogRead(ADC_PIN)*3.3/4096*2;
-}
-#endif
-
-#ifdef USE1WIRE
-//GPIO where the DS18b20 sensor is connected to
-const int oneWireBus_0_pin = 2;
-
-//Setup oneWire instance
-OneWire oneWireBus_0(oneWireBus_0_pin);
-//Pass our oneWire reference to Dallas Temperature sensor
-DallasTemperature sensors_0(&oneWireBus_0);
-
-#endif
-
-//user leds
-#define LED0 14
-#define LED1 12
 
 //define i2c pins
 #define I2CSDA_1 13
@@ -56,66 +21,6 @@ DallasTemperature sensors_0(&oneWireBus_0);
 
 //set the delay at the end of the loop
 #define UPLOOPTIME 60000
-
-const unsigned SENS_INTERVAL = 20;
-
-osjob_t readSensor;
-
-void do_read(osjob_t* j){
-    Serial.println("Start loop...");
-    #ifdef HAS_DISPLAY
-    // clear the display
-    display.clear();
-    display.drawString(0, 10, "TTGO Lora32 v2");
-    #ifdef MONVUSB
-    char buf0[32];
-    char buf1[32];
-    sprintf(buf0, "vbat: %.2f V",getVusb());
-    display.drawString(0,20, buf0);
-    Serial.println(buf0);
-    #endif
-    if(bme680fnd){
-      //bme.performReading();
-      sprintf(buf0, "Hum:%.1f, T:%.1f",bme.humidity, bme.temperature);
-      sprintf(buf1, "P:%.1f, G:%.1f", bme.pressure/100.0, bme.gas_resistance/1000.0);
-      display.drawString(0, 30, buf0);
-      display.drawString(0, 40, buf1);
-    }
-    if(veml7700fnd){
-      sprintf(buf0, "Lux: %.2f", veml.readLux());
-      display.drawString(0,50, buf0);
-    }
-    display.display();
-    #endif
-
-    #ifdef USE1WIRE
-    sensors_0.requestTemperatures(); 
-    float temperatureC = sensors_0.getTempCByIndex(0);
-    Serial.print(temperatureC);
-    Serial.println("ºC");
-    #endif
-
-
-  //LED0 has problem -> resolder to other pin
-  //toggle LED1
-  sprintf(buf0, "State GPIO pin(%d): %d", LED1, digitalRead(LED1));
-  Serial.println(buf1);
-  if(digitalRead(LED1) == 0){
-    digitalWrite(LED1, 1);
-  }
-  else{
-    digitalWrite(LED1, 0);
-  }
-  printVeml7700Infos();
-  printBme680Infos();
-  printLsm6dsInfos();
-
-  if(LORALOG){
-    loraLog();
-  }
-  // Schedule sensors reading cycle
-  os_setTimedCallback(&readSensor, os_getTime()+sec2osticks(SENS_INTERVAL), do_read);
-}
 
 //deep sleep state
 bool useDeepSleep = false;
@@ -149,9 +54,7 @@ void setup()
 
   #ifdef HAS_DISPLAY
   // Initialising the UI will init the display too.
-  display.init();
-  display.flipScreenVertically();
-  display.setFont(ArialMT_Plain_10);
+  displayConfig();
   #endif
 
   //setup i2c
@@ -181,14 +84,13 @@ void setup()
     esp_deep_sleep_start();
   }
   Serial.println("LoRa Receiver");
-  //setupLMIC();
-  // LMIC init
   os_init();
   // Reset the MAC state. Session and pending data transfers will be discarded.
   LMIC_reset();
 
   // Start job (sending automatically starts OTAA too)
   do_send(&sendjob);
+  // Start job reading sensor data
   do_read(&readSensor);
 }
 

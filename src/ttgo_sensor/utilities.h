@@ -160,6 +160,13 @@
 #define HAS_DISPLAY
 #define HAS_SDCARD
 
+/* user defined 
+ */
+//user leds
+#define LED0 14
+#define LED1 12
+/* end user definded */
+
 #elif defined(LILYGO_T3_S3_V1_0)
 
 #define I2C_SDA                     18

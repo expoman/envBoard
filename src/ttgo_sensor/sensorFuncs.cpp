@@ -1,5 +1,10 @@
 #include "sensorFuncs.h"
 
+const unsigned SENS_INTERVAL = 20;
+osjob_t readSensor;
+
+SSD1306Wire display(0x3c, I2C_SDA, I2C_SCL);
+
 //ambient light sensor
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
 //veml7700 found
@@ -36,6 +41,7 @@ void configBme680(){
     Serial.println("Could not find a valid BME680 sensor, check wiring!");
   }
   else{
+    Serial.println("found bme680");
     bme680fnd = true;
     // Set up oversampling and filter initialization
     bme.setTemperatureOversampling(BME680_OS_8X);
@@ -216,3 +222,75 @@ void printLsm6dsInfos(){
      Serial.println(" deg C");
   }
 }
+
+void do_read(osjob_t* j){
+    Serial.println("Start loop...");
+    char buf0[32];
+    char buf1[32];
+    #ifdef HAS_DISPLAY
+    // clear the display
+    display.clear();
+    display.drawString(0, 10, "TTGO Lora32 v2");
+    #ifdef MONVUSB
+    sprintf(buf0, "vbat: %.2f V",getVusb());
+    display.drawString(0,20, buf0);
+    Serial.println(buf0);
+    #endif
+    if(bme680fnd){
+      bme.performReading();
+      sprintf(buf0, "Hum:%.1f, T:%.1f",bme.humidity, bme.temperature);
+      sprintf(buf1, "P:%.1f, G:%.1f", bme.pressure/100.0, bme.gas_resistance/1000.0);
+      display.drawString(0, 30, buf0);
+      display.drawString(0, 40, buf1);
+    }
+    if(veml7700fnd){
+      sprintf(buf0, "Lux: %.2f", veml.readLux());
+      display.drawString(0,50, buf0);
+    }
+    display.display();
+    #endif
+
+    #ifdef USE1WIRE
+    sensors_0.requestTemperatures(); 
+    float temperatureC = sensors_0.getTempCByIndex(0);
+    Serial.print(temperatureC);
+    Serial.println("ºC");
+    #endif
+
+  //LED0 has problem -> resolder to other pin
+  //toggle LED1
+  sprintf(buf0, "State GPIO pin(%d): %d", LED1, digitalRead(LED1));
+  Serial.println(buf1);
+  if(digitalRead(LED1) == 0){
+    digitalWrite(LED1, 1);
+  }
+  else{
+    digitalWrite(LED1, 0);
+  }
+  // Schedule sensors reading cycle
+  os_setTimedCallback(&readSensor, os_getTime()+sec2osticks(SENS_INTERVAL), do_read);
+}
+
+void displayConfig(){
+  display.init();
+  display.flipScreenVertically();
+  display.setFont(ArialMT_Plain_10);
+}
+
+#ifdef MONVUSB
+float getVusb(){
+  return analogRead(ADC_PIN)*3.3/4096*2;
+}
+#endif
+
+#ifdef USE1WIRE
+//GPIO where the DS18b20 sensor is connected to
+const int oneWireBus_0_pin = 2;
+
+//Setup oneWire instance
+OneWire oneWireBus_0(oneWireBus_0_pin);
+//Pass our oneWire reference to Dallas Temperature sensor
+DallasTemperature sensors_0(&oneWireBus_0);
+
+#endif
+
