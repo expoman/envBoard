@@ -19,9 +19,6 @@
 #define I2CSDA_1 13
 #define I2CSCL_1 15
 
-//set the delay at the end of the loop
-#define UPLOOPTIME 60000
-
 //deep sleep state
 bool useDeepSleep = false;
 RTC_DATA_ATTR int counter = 0;
