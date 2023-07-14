@@ -158,7 +158,7 @@
 #define LED_ON                      LOW
 
 #define HAS_DISPLAY
-#define HAS_SDCARD
+//#define HAS_SDCARD
 
 /* user defined 
  */
