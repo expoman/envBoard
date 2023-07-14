@@ -13,6 +13,7 @@
 #include <DallasTemperature.h>
 
 extern DallasTemperature sensors_0;
+extern DallasTemperature sensors_1;
 
 #include <Adafruit_VEML7700.h>
 #include "Adafruit_BME680.h"

@@ -253,14 +253,24 @@ void do_read(osjob_t* j){
     #ifdef USE1WIRE
     sensors_0.requestTemperatures(); 
     float temperatureC = sensors_0.getTempCByIndex(0);
+    Serial.print("1Wire_0: ");
     Serial.print(temperatureC);
+    Serial.println("ºC");
+
+    sensors_1.requestTemperatures();
+    float temperatureC_1 = sensors_1.getTempCByIndex(0);
+    Serial.print("1Wire_1: ");
+    Serial.print(temperatureC_1);
     Serial.println("ºC");
     #endif
 
+   printBme680Infos();
+   printVeml7700Infos();
+   printLsm6dsInfos();
   //LED0 has problem -> resolder to other pin
   //toggle LED1
   sprintf(buf0, "State GPIO pin(%d): %d", LED1, digitalRead(LED1));
-  Serial.println(buf1);
+  Serial.println(buf0);
   if(digitalRead(LED1) == 0){
     digitalWrite(LED1, 1);
   }
@@ -285,12 +295,15 @@ float getVusb(){
 
 #ifdef USE1WIRE
 //GPIO where the DS18b20 sensor is connected to
-const int oneWireBus_0_pin = 2;
+const int oneWireBus_0_pin = 13;
+const int oneWireBus_1_pin = 15;
 
 //Setup oneWire instance
 OneWire oneWireBus_0(oneWireBus_0_pin);
+OneWire oneWireBus_1(oneWireBus_1_pin);
 //Pass our oneWire reference to Dallas Temperature sensor
 DallasTemperature sensors_0(&oneWireBus_0);
+DallasTemperature sensors_1(&oneWireBus_1);
 
 #endif
 
