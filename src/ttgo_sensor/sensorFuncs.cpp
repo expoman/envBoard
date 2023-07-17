@@ -238,6 +238,9 @@ void do_read(osjob_t* j){
     #endif
     if(bme680fnd){
       bme.performReading();
+      temperature = String(bme.temperature);
+      humidity = String(bme.humidity);
+      pressure = String(bme.pressure/100.0);
       sprintf(buf0, "Hum:%.1f, T:%.1f",bme.humidity, bme.temperature);
       sprintf(buf1, "P:%.1f, G:%.1f", bme.pressure/100.0, bme.gas_resistance/1000.0);
       display.drawString(0, 30, buf0);

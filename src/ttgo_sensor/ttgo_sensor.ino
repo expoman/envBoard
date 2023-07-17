@@ -13,11 +13,17 @@
 
 #include "ttn_funcs.h"
 
+#include <Preferences.h>
+
+#include "webserver.h"
+
 #define LORALOG false
 
 //define i2c pins
 #define I2CSDA_1 13
 #define I2CSCL_1 15
+
+Preferences prefs;
 
 //deep sleep state
 bool useDeepSleep = false;
@@ -40,9 +46,17 @@ void print_wakeup_reason(){
   }
 }
 
+String getDevName(){
+   return prefs.getString("devName", "devBoard");
+}
+
 void setup()
 {
   initBoard();
+
+  prefs.begin("envSensor", false);
+
+  Serial.println(getDevName().c_str());
 
   if(useDeepSleep){
     esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
@@ -84,6 +98,9 @@ void setup()
   os_init();
   // Reset the MAC state. Session and pending data transfers will be discarded.
   LMIC_reset();
+
+  //configure webserver
+  configWebserver();
 
   // Start job (sending automatically starts OTAA too)
   do_send(&sendjob);

@@ -15,6 +15,10 @@
 extern DallasTemperature sensors_0;
 extern DallasTemperature sensors_1;
 
+extern String temperature;
+extern String humidity;
+extern String pressure;
+
 #include <Adafruit_VEML7700.h>
 #include "Adafruit_BME680.h"
 #include <Adafruit_LSM6DS3TRC.h>
