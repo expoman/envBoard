@@ -4,8 +4,7 @@
 #include <WiFi.h>
 #include "AsyncTCP.h"
 #include "ESPAsyncWebServer.h"
-
-extern String deviceName;
+#include "main.h"
 
 void configWebserver();
 

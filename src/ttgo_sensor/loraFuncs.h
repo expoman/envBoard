@@ -4,8 +4,8 @@
 #include "utilities.h"
 #include <LoRa.h>
 #include "sensorFuncs.h"
+#include "main.h"
 
-extern String deviceName;
 
 extern osjob_t loraSendJob;
 void do_lorasend(osjob_t* j);

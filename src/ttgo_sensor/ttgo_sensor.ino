@@ -8,6 +8,8 @@
 //Lora
 #include <LoRa.h>
 
+#include "main.h"
+
 #include "sensorFuncs.h"
 #include "loraFuncs.h"
 
@@ -16,8 +18,6 @@
 #include <Preferences.h>
 
 #include "webserver.h"
-
-#define LORALOG false
 
 //define i2c pins
 #define I2CSDA_1 13
