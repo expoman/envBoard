@@ -107,6 +107,8 @@ void setup()
 
   // Start job (sending automatically starts OTAA too)
   do_send(&sendjob);
+  // Start Lora job (sending automatically starts OTAA too)
+  do_lorasend(&loraSendJob);
   // Start job reading sensor data
   do_read(&readSensor);
 }
