@@ -7,6 +7,9 @@
 
 extern String deviceName;
 
+extern osjob_t loraSendJob;
+void do_lorasend(osjob_t* j);
+
 void configLora();
 void loraLog();
 

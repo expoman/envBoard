@@ -1,5 +1,13 @@
 #include "loraFuncs.h"
 
+const unsigned LORA_INTERVAL = 120;
+osjob_t loraSendJob;
+
+void do_lorasend(osjob_t* j){
+  loraLog();
+  os_setTimedCallback(&loraSendJob, os_getTime()+sec2osticks(LORA_INTERVAL), do_lorasend);
+}
+
 void configLora(){
   Serial.println("configure LoRa");
   LoRa.setPins(RADIO_CS_PIN, RADIO_RST_PIN, RADIO_DIO0_PIN);
