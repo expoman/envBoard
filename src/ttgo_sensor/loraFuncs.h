@@ -5,6 +5,7 @@
 #include <LoRa.h>
 #include "sensorFuncs.h"
 
+extern String deviceName;
 
 void configLora();
 void loraLog();

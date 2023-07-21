@@ -14,7 +14,9 @@ void loraLog(){
     //send packet
     LoRa.beginPacket();
     LoRa.print("{");
-    LoRa.print("\"room\": \"test_device\", ");
+    LoRa.print("\"room\": \"");
+    LoRa.print(deviceName.c_str());
+    LoRa.print("\", ");
     if(veml7700fnd){
     LoRa.print("\"Lux\": ");
     LoRa.print(veml.readLux());

@@ -50,6 +50,8 @@ String getDevName(){
    return prefs.getString("devName", "devBoard");
 }
 
+String deviceName = "";
+
 void setup()
 {
   initBoard();
@@ -57,6 +59,7 @@ void setup()
   prefs.begin("envSensor", false);
 
   Serial.println(getDevName().c_str());
+  deviceName = getDevName();
 
   if(useDeepSleep){
     esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);

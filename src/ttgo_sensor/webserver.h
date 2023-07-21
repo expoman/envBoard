@@ -5,6 +5,8 @@
 #include "AsyncTCP.h"
 #include "ESPAsyncWebServer.h"
 
+extern String deviceName;
+
 void configWebserver();
 
 extern IPAddress IP;

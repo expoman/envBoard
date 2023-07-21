@@ -12,8 +12,10 @@ const char* password = "123456789";
 
 // Replaces placeholder with sensor values
 String processor(const String& var){
-  //Serial.println(var);
-  if(var == "TEMPERATURE"){
+  if(var == "DEVICENAME"){
+    return deviceName;
+  }
+  else if(var == "TEMPERATURE"){
     return temperature;
   }
   else if(var == "HUMIDITY"){
@@ -80,6 +82,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 <body>
   <header>
     <h2>Schluettler EnvBoard v1.0</h2>
+    <h3>Device: %DEVICENAME%</h3>
   </header>
 <main>
   <p>
