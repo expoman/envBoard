@@ -6,6 +6,7 @@
 #include <Wire.h>
 #include "utilities.h"
 #include <Arduino.h>
+#include "main.h"
 
 extern const lmic_pinmap lmic_pins;
 
