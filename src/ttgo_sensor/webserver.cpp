@@ -4,6 +4,8 @@ String temperature;
 String humidity;
 String pressure;
 
+const char* PARAM_INPUT_1 = "deviceName";
+
 AsyncWebServer server(80);
 
 // Replace with your network credentials
@@ -47,6 +49,28 @@ void configWebserver(){
   });
   server.on("/pressure", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/plain", pressure.c_str());
+  });
+  server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
+    String inputMessage;
+    String inputParam;
+    if (request->hasParam(PARAM_INPUT_1)) {
+      Serial.println("found deviceName parameter in request");
+      inputMessage = request->getParam(PARAM_INPUT_1)->value();
+      inputParam = PARAM_INPUT_1;
+      deviceName = inputMessage;
+      prefs.begin("envSensor", false);
+      prefs.putString("devName", deviceName);
+      prefs.end();
+    }
+    else {
+      inputMessage = "No message sent";
+      inputParam = "none";
+    }
+    Serial.print("received message: ");
+    Serial.println(inputMessage);
+    request->send(200, "text/html", "HTTP GET request sent to your ESP on input field ("
+                                     + inputParam + ") with value: " + inputMessage +
+                                     "<br><a href=\"/\">Return to Home Page</a>");
   });
   // Start server
   server.begin();
@@ -97,6 +121,10 @@ const char index_html[] PROGMEM = R"rawliteral(
     <i class="fas fa-angle-double-down" style="color:#e8c14d;"></i> Pressure: <span id="pressure" class="readings">%PRESSURE%</span>
     <sup>hpa</sup>
   </p>
+  <form action="/get">
+    device name: <input type="text" name="deviceName" value="%DEVICENAME%">
+    <input type="submit" value="Submit">
+  </form>
 </main>
 <script>
 setInterval(updateValues, 10000, "temperature");
