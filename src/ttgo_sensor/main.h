@@ -3,7 +3,9 @@
 #include <Preferences.h>
 #define LORALOG false
 
-extern String deviceName;
 extern Preferences prefs;
+
+extern String deviceName;
+extern uint8_t logMethod;
 
 #endif /* -- MAIN_H -- */

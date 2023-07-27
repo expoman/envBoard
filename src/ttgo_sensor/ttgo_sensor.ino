@@ -51,6 +51,8 @@ String getDevName(){
 }
 
 String deviceName = "";
+uint8_t logMethod = 0;
+uint8_t logLoraInterval = 0;
 
 void setup()
 {
@@ -60,6 +62,8 @@ void setup()
 
   Serial.println(getDevName().c_str());
   deviceName = getDevName();
+  logMethod = prefs.getUInt("logMethod", 0);
+  logLoraInterval = prefs.getUInt("logLoraInterval", 120);
 
   if(useDeepSleep){
     esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);

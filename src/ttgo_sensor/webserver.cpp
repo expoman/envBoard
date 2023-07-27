@@ -5,6 +5,7 @@ String humidity;
 String pressure;
 
 const char* PARAM_INPUT_1 = "deviceName";
+const char* PARAM_INPUT_2 = "logMethod";
 
 AsyncWebServer server(80);
 
@@ -25,6 +26,14 @@ String processor(const String& var){
   }
   else if(var == "PRESSURE"){
     return pressure;
+  }
+  else if(var == "LOGMETHOD"){
+    if(logMethod == 0)
+      return "None";
+    else if(logMethod == 1)
+      return "LoRa";
+    else if(logMethod == 2)
+      return "TTN";
   }
   return String();
 }
@@ -60,6 +69,22 @@ void configWebserver(){
       deviceName = inputMessage;
       prefs.begin("envSensor", false);
       prefs.putString("devName", deviceName);
+      prefs.end();
+    }
+    else if (request->hasParam(PARAM_INPUT_2)) {
+      Serial.println("found logging parameter in request");
+      inputMessage = request->getParam(PARAM_INPUT_2)->value();
+      uint8_t inputNumber;
+      if(inputMessage == "LoRa")
+        inputNumber = 1;
+      else if(inputMessage == "TTN")
+        inputNumber = 2;
+      else
+        inputNumber = 0;
+      inputParam = PARAM_INPUT_2;
+      logMethod = inputNumber;
+      prefs.begin("envSensor", false);
+      prefs.putUInt("logMethod", inputNumber);
       prefs.end();
     }
     else {
@@ -121,10 +146,38 @@ const char index_html[] PROGMEM = R"rawliteral(
     <i class="fas fa-angle-double-down" style="color:#e8c14d;"></i> Pressure: <span id="pressure" class="readings">%PRESSURE%</span>
     <sup>hpa</sup>
   </p>
+  <p>
+    <i class="fas fa-angle-double-down" style="color:#e8c14d;"></i> LogMethod: <span id="logMethod" class="readings">%LOGMETHOD%</span>
+  </p>
+<hr />
+<h3>Configuration</h3>
+<br>
+<p>
   <form action="/get">
     device name: <input type="text" name="deviceName" value="%DEVICENAME%">
     <input type="submit" value="Submit">
   </form>
+</p>
+<p>
+<form action="/get">
+  <fieldset>
+    <legend>Please select your logging method:</legend>
+    <div>
+      <input type="radio" id="logMethodNone" name="logMethod" value="None" />
+      <label for="logMethodNone">None</label>
+
+      <input type="radio" id="logMethodLora" name="logMethod" value="LoRa" />
+      <label for="logMethodLora">LoRa</label>
+
+      <input type="radio" id="logMethodTTN" name="logMethod" value="TTN" />
+      <label for="logMethodTTN">TTN</label>
+    </div>
+    <div>
+      <button type="submit">Submit</button>
+    </div>
+  </fieldset>
+</form>
+</p>
 </main>
 <script>
 setInterval(updateValues, 10000, "temperature");
