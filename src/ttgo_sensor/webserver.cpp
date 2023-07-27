@@ -33,11 +33,11 @@ String processor(const String& var){
   }
   else if(var == "LOGMETHOD"){
     if(logMethod == 0)
-      return "None";
+      return String("None");
     else if(logMethod == 1)
-      return "LoRa";
+      return String("LoRa");
     else if(logMethod == 2)
-      return "TTN";
+      return String("TTN");
   }
   return String();
 }
