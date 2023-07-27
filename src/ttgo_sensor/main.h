@@ -7,5 +7,6 @@ extern Preferences prefs;
 
 extern String deviceName;
 extern uint8_t logMethod;
+extern uint8_t logLoraInterval;
 
 #endif /* -- MAIN_H -- */

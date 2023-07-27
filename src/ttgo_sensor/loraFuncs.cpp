@@ -1,13 +1,12 @@
 #include "loraFuncs.h"
 
-const unsigned LORA_INTERVAL = 120;
 osjob_t loraSendJob;
 
 void do_lorasend(osjob_t* j){
   if(LORALOG){
      loraLog();
   }
-  os_setTimedCallback(&loraSendJob, os_getTime()+sec2osticks(LORA_INTERVAL), do_lorasend);
+  os_setTimedCallback(&loraSendJob, os_getTime()+sec2osticks(logLoraInterval), do_lorasend);
 }
 
 void configLora(){

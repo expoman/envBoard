@@ -6,6 +6,7 @@ String pressure;
 
 const char* PARAM_INPUT_1 = "deviceName";
 const char* PARAM_INPUT_2 = "logMethod";
+const char* PARAM_INPUT_3 = "logLoraInterval";
 
 AsyncWebServer server(80);
 
@@ -26,6 +27,9 @@ String processor(const String& var){
   }
   else if(var == "PRESSURE"){
     return pressure;
+  }
+  else if(var == "LOGLORAINTERVAL"){
+    return String(logLoraInterval);
   }
   else if(var == "LOGMETHOD"){
     if(logMethod == 0)
@@ -85,6 +89,15 @@ void configWebserver(){
       logMethod = inputNumber;
       prefs.begin("envSensor", false);
       prefs.putUInt("logMethod", inputNumber);
+      prefs.end();
+    }
+    else if (request->hasParam(PARAM_INPUT_3)) {
+      Serial.println("found lora logging interval parameter in request");
+      inputMessage = request->getParam(PARAM_INPUT_3)->value();
+      inputParam = PARAM_INPUT_3;
+      logLoraInterval = inputMessage.toInt();
+      prefs.begin("envSensor", false);
+      prefs.putUInt("logLoraInterval", logLoraInterval);
       prefs.end();
     }
     else {
@@ -177,6 +190,12 @@ const char index_html[] PROGMEM = R"rawliteral(
     </div>
   </fieldset>
 </form>
+</p>
+<p>
+  <form action="/get">
+    lora log interval [s]: <input type="text" name="logLoraInterval" value="%LOGLORAINTERVAL%">
+    <input type="submit" value="Submit">
+  </form>
 </p>
 </main>
 <script>
