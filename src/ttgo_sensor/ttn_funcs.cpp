@@ -160,10 +160,15 @@ void do_send(osjob_t* j){
     if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));
     } else {
+	if(logMethod ==2){
         // Prepare upstream data transmission at the next possible time.
 	static uint8_t mydata[] = "Hello, Maurice!";
         LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
         Serial.println(F("Packet queued"));
+	}
+	else{
+	Serial.println("not sending to ttn");
+	}
     }
     // Next TX is scheduled after TX_COMPLETE event.
 }

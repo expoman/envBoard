@@ -3,8 +3,10 @@
 osjob_t loraSendJob;
 
 void do_lorasend(osjob_t* j){
-  if(LORALOG){
+  if(logMethod == 1){
+     Serial.println("start loraLog");
      loraLog();
+     Serial.println("end loraLog");
   }
   os_setTimedCallback(&loraSendJob, os_getTime()+sec2osticks(logLoraInterval), do_lorasend);
 }
