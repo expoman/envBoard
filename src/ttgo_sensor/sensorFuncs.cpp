@@ -1,7 +1,8 @@
 #include "sensorFuncs.h"
 
 const unsigned SENS_INTERVAL = 20;
-osjob_t readSensor;
+
+uint8_t sensorData = 0;
 
 SSD1306Wire display(0x3c, I2C_SDA, I2C_SCL);
 
@@ -223,7 +224,8 @@ void printLsm6dsInfos(){
   }
 }
 
-void do_read(osjob_t* j){
+void do_readSensors(void * parameters){
+for(;;){
     Serial.println("Start loop...");
     char buf0[32];
     char buf1[32];
@@ -280,8 +282,11 @@ void do_read(osjob_t* j){
   else{
     digitalWrite(LED1, 0);
   }
+  sensorData = 1;
   // Schedule sensors reading cycle
-  os_setTimedCallback(&readSensor, os_getTime()+sec2osticks(SENS_INTERVAL), do_read);
+  vTaskDelay(10000/ portTICK_PERIOD_MS);
+  //vTaskDelay(SENS_INTERVAL * 1000/ portTICK_PERIOD_MS);
+}
 }
 
 void displayConfig(){

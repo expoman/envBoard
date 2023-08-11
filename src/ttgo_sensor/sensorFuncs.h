@@ -49,8 +49,7 @@ extern bool lsm6dsfnd;
 void configLsm6ds();
 void printLsm6dsInfos();
 
-extern osjob_t readSensor;
-void do_read(osjob_t* j);
+void do_readSensors(void * parameters);
 
 void displayConfig();
 #endif

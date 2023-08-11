@@ -5,10 +5,9 @@
 #include <LoRa.h>
 #include "sensorFuncs.h"
 #include "main.h"
+#include "dataFormat.h"
 
-
-extern osjob_t loraSendJob;
-void do_lorasend(osjob_t* j);
+void do_lorasend(void * parameters);
 
 void configLora();
 void loraLog();

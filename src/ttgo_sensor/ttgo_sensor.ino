@@ -2,7 +2,7 @@
 #include <Wire.h>               // Only needed for Arduino 1.6.5 and earlier
 
 #include <lmic.h>
-#include <hal/hal.h>
+#include "Arduino.h"
 #include <SPI.h>
 
 //Lora
@@ -64,6 +64,8 @@ void setup()
   deviceName = getDevName();
   logMethod = prefs.getUInt("logMethod", 0);
   logLoraInterval = prefs.getUInt("logLoraInterval", 120);
+  Serial.print("logInterval: ");
+  Serial.println(logLoraInterval);
 
   if(useDeepSleep){
     esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
@@ -102,22 +104,27 @@ void setup()
     esp_deep_sleep_start();
   }
   Serial.println("LoRa Receiver");
-  os_init();
   // Reset the MAC state. Session and pending data transfers will be discarded.
-  LMIC_reset();
+//  LMIC_reset();
 
   //configure webserver
   configWebserver();
 
   // Start job (sending automatically starts OTAA too)
-  do_send(&sendjob);
   // Start Lora job (sending automatically starts OTAA too)
-  do_lorasend(&loraSendJob);
+  xTaskCreate(do_lorasend, "LoraTask", 2000, NULL, 1, NULL);
   // Start job reading sensor data
-  do_read(&readSensor);
+  xTaskCreate(do_readSensors, "sensTask", 2000, NULL, 1, NULL);
 }
 
 void loop()
 {
-  os_runloop_once();
+vTaskDelay(10 / portTICK_PERIOD_MS);
+  //Serial.println("start");
+  //LoRa.beginPacket();
+  //LoRa.print("\"room\": \"");
+  //LoRa.print(deviceName.c_str());
+  //LoRa.endPacket();
+  //Serial.println("end");
+  //delay(5000);
 }

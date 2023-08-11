@@ -1,14 +1,16 @@
 #include "loraFuncs.h"
 
-osjob_t loraSendJob;
-
-void do_lorasend(osjob_t* j){
+void do_lorasend(void * parameters){
+for(;;){
   if(logMethod == 1){
-     Serial.println("start loraLog");
-     loraLog();
-     Serial.println("end loraLog");
+     if(sensorData != 0){
+        Serial.println("start loraLog");
+        loraLog();
+        Serial.println("end loraLog");
+     }
   }
-  os_setTimedCallback(&loraSendJob, os_getTime()+sec2osticks(logLoraInterval), do_lorasend);
+  vTaskDelay(logLoraInterval * 1000/ portTICK_PERIOD_MS);
+}
 }
 
 void configLora(){
@@ -24,28 +26,44 @@ void loraLog(){
   Serial.print("LoRa sending packet");
     //send packet
     LoRa.beginPacket();
-    LoRa.print("{");
-    LoRa.print("\"room\": \"");
+    LoRa.print(DATAROOM);
+    LoRa.print(":");
     LoRa.print(deviceName.c_str());
-    LoRa.print("\", ");
+    LoRa.print(",");
     if(veml7700fnd){
-    LoRa.print("\"Lux\": ");
+    LoRa.print(DATALUX);
+    LoRa.print(":");
     LoRa.print(veml.readLux());
     }
-    LoRa.print(", \"OneWireTemp_0\": ");
-    LoRa.print(sensors_0.getTempCByIndex(0));
+    float owTemp0 = sensors_0.getTempCByIndex(0); 
+    if(owTemp != 127){
+       LoRa.print(",");
+       LoRa.print(DATAONEWIRE0);
+       LoRa.print(":");
+       LoRa.print(owTemp0);
+    }
     #ifdef MONVUSB
-    LoRa.print(", \"VBAT\": ");
+    LoRa.print(",");
+    LoRa.print(DATAVBAT);
+    LoRa.print(":");
     LoRa.print(getVusb());
     #endif
     if(bme680fnd){
-    LoRa.print(", \"Hum\": ");
+    LoRa.print(",");
+    LoRa.print(DATABMEHUM);
+    LoRa.print(":");
     LoRa.print(bme.humidity);
-    LoRa.print(", \"BmeTemp\": ");
+    LoRa.print(",");
+    LoRa.print(DATABMETEMP);
+    LoRa.print(":");
     LoRa.print(bme.temperature);
-    LoRa.print(", \"Pressure\": ");
+    LoRa.print(",");
+    LoRa.print(DATABMEPRESSURE);
+    LoRa.print(":");
     LoRa.print(bme.pressure / 100.0);
-    LoRa.print(", \"Gas\": ");
+    LoRa.print(",");
+    LoRa.print(DATABMEGAS);
+    LoRa.print(":");
     LoRa.print(bme.gas_resistance/1000.0);
     }
 
@@ -54,15 +72,26 @@ void loraLog(){
     sensors_event_t gyro;
     sensors_event_t temp;
     lsm6ds3trc.getEvent(&accel, &gyro, &temp);
-    LoRa.print(", \"Accel_X\": ");
+    LoRa.print(",");
+    LoRa.print(DATAACCELX);
+    LoRa.print(":");
     LoRa.print(accel.acceleration.x);
-    LoRa.print(", \"Accel_Y\": ");
+    LoRa.print(",");
+    LoRa.print(DATAACCELY);
+    LoRa.print(":");
     LoRa.print(accel.acceleration.y);
-    LoRa.print(", \"Accel_Z\": ");
+    LoRa.print(",");
+    LoRa.print(DATAACCELZ);
+    LoRa.print(":");
     LoRa.print(accel.acceleration.z);
-    LoRa.print(", \"Accel_Temp\": ");
+    LoRa.print(",");
+    LoRa.print(DATAACCELTEMP);
+    LoRa.print(":");
     LoRa.print(temp.temperature);
-    LoRa.print("}");
     }
-    LoRa.endPacket();
+    uint8_t resLora = LoRa.endPacket();
+    Serial.print("result lora");
+    Serial.println(resLora);
+    Serial.println("end");
+    delay(500);
 }

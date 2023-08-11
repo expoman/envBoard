@@ -5,7 +5,7 @@
 // #define LILYGO_T3_V1_0
 // #define LILYGO_T3_V1_3
 // #define LILYGO_T3_V1_6
- #define LILYGO_T3_V2_0
+#define LILYGO_T3_V2_0
 // #define LILYGO_T3_S3_V1_0
 
 
@@ -15,7 +15,7 @@
 * please open this note and change to the frequency you need to test
 * */
 
-#define LoRa_frequency      868.0
+#define LoRa_frequency      868E6
 
 
 #define UNUSE_PIN                   (0)
@@ -118,9 +118,11 @@
 #define RADIO_MOSI_PIN              27
 #define RADIO_CS_PIN                18
 #define RADIO_DIO0_PIN               26
-#define RADIO_RST_PIN               23
-#define RADIO_DIO1_PIN              33
-#define RADIO_BUSY_PIN              32
+#define RADIO_RST_PIN               14
+#define RADIO_DIO1_PIN              UNUSE_PIN
+#define RADIO_BUSY_PIN              UNUSE_PIN
+//#define RADIO_DIO1_PIN              33
+//#define RADIO_BUSY_PIN              32
 
 #define SDCARD_MOSI                 15
 #define SDCARD_MISO                 2
@@ -134,6 +136,8 @@
 
 #define HAS_SDCARD
 #define HAS_DISPLAY
+#define LED0 14
+#define LED1 12
 
 #elif defined(LILYGO_T3_V2_0)
 #define I2C_SDA                     21
