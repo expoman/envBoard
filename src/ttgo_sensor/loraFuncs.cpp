@@ -36,7 +36,7 @@ void loraLog(){
     LoRa.print(veml.readLux());
     }
     float owTemp0 = sensors_0.getTempCByIndex(0); 
-    if(owTemp != 127){
+    if(owTemp0 != 127){
        LoRa.print(",");
        LoRa.print(DATAONEWIRE0);
        LoRa.print(":");
