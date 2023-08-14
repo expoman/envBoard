@@ -105,12 +105,13 @@ void setup()
   }
   Serial.println("LoRa Receiver");
   // Reset the MAC state. Session and pending data transfers will be discarded.
-//  LMIC_reset();
+  //LMIC_reset();
 
   //configure webserver
   configWebserver();
 
   // Start job (sending automatically starts OTAA too)
+  //xTaskCreate(do_send, "LoraTTNTask", 1000, NULL, 1, NULL);
   // Start Lora job (sending automatically starts OTAA too)
   xTaskCreate(do_lorasend, "LoraTask", 2000, NULL, 1, NULL);
   // Start job reading sensor data

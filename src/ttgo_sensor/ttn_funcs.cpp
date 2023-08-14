@@ -8,8 +8,6 @@ const lmic_pinmap lmic_pins = {
     .dio = {RADIO_DIO0_PIN, RADIO_DIO1_PIN, RADIO_BUSY_PIN}
 };
 
-osjob_t sendjob;
-
 // This EUI must be in little-endian format, so least-significant-byte
 // first. When copying an EUI from ttnctl output, this means to reverse
 // the bytes. For TTN issued EUIs the last bytes should be 0xD5, 0xB3,
@@ -109,7 +107,7 @@ void onEvent (ev_t ev) {
               Serial.println(F(" bytes of payload"));
             }
             // Schedule next transmission
-            os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(logLoraInterval), do_send);
+	    vTaskDelay(logLoraInterval * 1000/ portTICK_PERIOD_MS);
             break;
         case EV_LOST_TSYNC:
             Serial.println(F("EV_LOST_TSYNC"));
@@ -155,7 +153,7 @@ void onEvent (ev_t ev) {
     }
 }
 
-void do_send(osjob_t* j){
+void do_send(void * parameters){
     // Check if there is not a current TX/RX job running
     if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));

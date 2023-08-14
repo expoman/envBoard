@@ -10,9 +10,7 @@
 
 extern const lmic_pinmap lmic_pins;
 
-extern osjob_t sendjob;
-
 void onEvent (ev_t ev);
-void do_send(osjob_t* j);
+void do_send(void * parameters);
 
 #endif
