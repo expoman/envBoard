@@ -7,6 +7,7 @@ String pressure;
 const char* PARAM_INPUT_1 = "deviceName";
 const char* PARAM_INPUT_2 = "logMethod";
 const char* PARAM_INPUT_3 = "logLoraInterval";
+const char* PARAM_INPUT_4 = "resetESP32";
 
 AsyncWebServer server(80);
 
@@ -99,6 +100,13 @@ void configWebserver(){
       prefs.begin("envSensor", false);
       prefs.putUInt("logLoraInterval", logLoraInterval);
       prefs.end();
+    }
+    else if (request->hasParam(PARAM_INPUT_4)){
+      Serial.println("found esp32 reset request");
+      inputMessage = request->getParam(PARAM_INPUT_4)->value();
+      inputParam = PARAM_INPUT_4;
+      if(inputParam = "true")
+         ESP.restart();
     }
     else {
       inputMessage = "No message sent";
@@ -195,6 +203,12 @@ const char index_html[] PROGMEM = R"rawliteral(
   <form action="/get">
     lora log interval [s]: <input type="text" name="logLoraInterval" value="%LOGLORAINTERVAL%">
     <input type="submit" value="Submit">
+  </form>
+</p>
+<p>
+  <form action="/get">
+    <input type="hidden" name="resetESP32" value="true">
+    <input type="submit" value="Reset ESP32">
   </form>
 </p>
 </main>
