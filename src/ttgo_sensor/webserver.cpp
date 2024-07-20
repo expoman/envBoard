@@ -151,7 +151,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </head>
 <body>
   <header>
-    <h2>Schluettler EnvBoard v1.0</h2>
+    <h2>Schluettler EnvBoard v1.1</h2>
     <h3>Device: %DEVICENAME%</h3>
   </header>
 <main>

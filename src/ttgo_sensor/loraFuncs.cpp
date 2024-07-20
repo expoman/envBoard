@@ -89,6 +89,7 @@ void loraLog(){
     LoRa.print(":");
     LoRa.print(temp.temperature);
     }
+    LoRa.print("}");
     uint8_t resLora = LoRa.endPacket();
     Serial.print("result lora");
     Serial.println(resLora);
