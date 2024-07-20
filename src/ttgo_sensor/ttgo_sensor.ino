@@ -104,13 +104,13 @@ void setup()
   Serial.println("LoRa Receiver");
   os_init();
   // Reset the MAC state. Session and pending data transfers will be discarded.
-  LMIC_reset();
+//  LMIC_reset();
 
   //configure webserver
   configWebserver();
 
   // Start job (sending automatically starts OTAA too)
-  do_send(&sendjob);
+ // do_send(&sendjob);
   // Start Lora job (sending automatically starts OTAA too)
   do_lorasend(&loraSendJob);
   // Start job reading sensor data
@@ -120,4 +120,11 @@ void setup()
 void loop()
 {
   os_runloop_once();
+  //  Serial.println("start");
+  //  LoRa.beginPacket();
+  //  LoRa.print("\"room\": \"");
+  //  LoRa.print(deviceName.c_str());
+  //  LoRa.endPacket();
+  //  Serial.println("end");
+  //  delay(5000);
 }

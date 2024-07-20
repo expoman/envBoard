@@ -1,0 +1,27 @@
+Der Sketch verwendet 1034145 Bytes (78%) des Programmspeicherplatzes. Das Maximum sind 1310720 Bytes.
+Globale Variablen verwenden 46304 Bytes (15%) des dynamischen Speichers, 248608 Bytes für lokale Variablen verbleiben. Das Maximum sind 294912 Bytes.
+
+[92mBenutzte Bibliothek[0m                                [92mVersion[0m [90mPfad[0m
+[93mWire[0m                                               2.0.0   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2/libraries/Wire[0m
+[93mMCCI LoRaWAN LMIC library[0m                          4.1.1   [90m/home/maurice/Arduino/libraries/MCCI_LoRaWAN_LMIC_library[0m
+[93mSPI[0m                                                2.0.0   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2/libraries/SPI[0m
+[93mLoRa[0m                                               0.8.0   [90m/home/maurice/Arduino/libraries/LoRa[0m
+[93mPreferences[0m                                        2.0.0   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2/libraries/Preferences[0m
+[93mESP8266 and ESP32 OLED driver for SSD1306 displays[0m 4.6.1   [90m/home/maurice/Arduino/libraries/ESP8266_and_ESP32_OLED_driver_for_SSD1306_displays[0m
+[93mSD[0m                                                 2.0.0   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2/libraries/SD[0m
+[93mFS[0m                                                 2.0.0   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2/libraries/FS[0m
+[93mU8g2[0m                                               2.34.22 [90m/home/maurice/Arduino/libraries/U8g2[0m
+[93mOneWire[0m                                            2.3.8   [90m/home/maurice/Arduino/libraries/OneWire[0m
+[93mDallasTemperature[0m                                  3.9.0   [90m/home/maurice/Arduino/libraries/DallasTemperature[0m
+[93mAdafruit VEML7700 Library[0m                          2.1.6   [90m/home/maurice/Arduino/libraries/Adafruit_VEML7700_Library[0m
+[93mAdafruit BusIO[0m                                     1.16.1  [90m/home/maurice/Arduino/libraries/Adafruit_BusIO[0m
+[93mAdafruit BME680 Library[0m                            2.0.4   [90m/home/maurice/Arduino/libraries/Adafruit_BME680_Library[0m
+[93mAdafruit Unified Sensor[0m                            1.1.14  [90m/home/maurice/Arduino/libraries/Adafruit_Unified_Sensor[0m
+[93mAdafruit LSM6DS[0m                                    4.7.3   [90m/home/maurice/Arduino/libraries/Adafruit_LSM6DS[0m
+[93mWiFi[0m                                               2.0.0   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2/libraries/WiFi[0m
+[93mNetworking[0m                                         1.0.0   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2/libraries/Network[0m
+[93mAsyncTCP[0m                                           1.1.4   [90m/home/maurice/Arduino/libraries/AsyncTCP[0m
+[93mESPAsyncWebServer[0m                                  3.1.0   [90m/home/maurice/Arduino/libraries/ESPAsyncWebServer[0m
+
+[92mVerwendete Plattform[0m [92mVersion[0m [90mPfad[0m
+[93mesp32:esp32[0m          3.0.2   [90m/linuxdata/.arduino15/packages/esp32/hardware/esp32/3.0.2[0m

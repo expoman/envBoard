@@ -4,8 +4,8 @@
 // #define LILYGO_TBeam_V1_X
 // #define LILYGO_T3_V1_0
 // #define LILYGO_T3_V1_3
-// #define LILYGO_T3_V1_6
- #define LILYGO_T3_V2_0
+ #define LILYGO_T3_V1_6
+// #define LILYGO_T3_V2_0
 // #define LILYGO_T3_S3_V1_0
 
 
@@ -15,7 +15,7 @@
 * please open this note and change to the frequency you need to test
 * */
 
-#define LoRa_frequency      868.0
+#define LoRa_frequency      868E6
 
 
 #define UNUSE_PIN                   (0)
@@ -134,6 +134,8 @@
 
 #define HAS_SDCARD
 #define HAS_DISPLAY
+#define LED0 14
+#define LED1 12
 
 #elif defined(LILYGO_T3_V2_0)
 #define I2C_SDA                     21
